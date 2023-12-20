@@ -12,35 +12,36 @@ def downloadAudioByUrl(url):
         stream = video.streams.filter(only_audio=True).first()
         stream.download(output_path=downloadLocation,skip_existing=True,filename=f"{video.title}.mp3")
 
-def getUrlByName(vidoName):
-    results = YoutubeSearch(vidoName, max_results=1).to_dict()
-    
-    return "https://www.youtube.com/" + results[0]["url_suffix"]
-
 def downloadAudioByName(vidoName):
     try:
-        url = getUrlByName(vidoName)
+        YoutubeSearchResult = YoutubeSearch(vidoName, max_results=1).to_dict()
+        url = "https://www.youtube.com/" + YoutubeSearchResult[0]["url_suffix"]
 
-        
+        downloadAudioByUrl(url)
     except:
         print("could not find " + vidoName)
         return
 
-    downloadAudioByUrl(url)
 
+downloadAudioByUrl("https://www.youtube.com/watch?v=7Sk78uP9m-E")
 
+"""
 songsToDownload = []
-with open("downloadList1.csv","r") as file:
+with open("favered_mirror.csv","r") as file:
+    desciptors = file.readline()
     for songName in file:
         if songName == "":
             pass
-        songsToDownload.append(songName)
+        songNameSplit = songName.split(",")
+        songsToDownload.append(songNameSplit[2][1:-1]+" by "+songNameSplit[4][1:-1])
 
-
+i = 0
 for songName in songsToDownload:
-    print(songName)
-    downloadAudioByName(songName)
+    if (i<5):
+        print(songName)
+        downloadAudioByName(songName)
+    i += 1
 
-
+"""
 
 
